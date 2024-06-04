@@ -1,0 +1,109 @@
+<div class="container">
+<br/>
+<h1>Profiles</h1>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">1</th>
+  <div id="profiles">
+  
+       <td>
+        <%= current_user.profile.name%>
+       </td>    
+       <td>
+       <%= link_to "Show this profile", @profile %>
+       </td>
+
+   
+   <% if current_user.profile.nil? %>
+          <td> Not Available</td>
+          <td>Not Available</td>
+   <%end%>
+ </div>
+</tr>    
+  </tbody>
+</table>
+<br/><br/>
+
+<%if !current_user.profile%>
+<%= link_to "New profile", new_profile_path ,class:"btn btn-dark"%>
+<%end%>
+
+<br/><br/>
+<h1>Tweets</h1>
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col" colspan="2">Action</th>
+
+    </tr>
+  </thead>
+  <tbody>
+   <%if @tweets.count ==0%>
+    <td >1</td>
+    <td>Not Available</td>
+    <td>Not Available</td>
+  <%else%>  
+  <% @tweets.each do |tweet|%>
+  <tr>
+      <td class="counterCell"></td>
+      <td> <%= tweet.title%></td>
+      <td><%= link_to "Show" ,tweet ,class:"btn btn-secondary btn-sm"%></td>
+      <td>
+       <%= button_to "Destroy", tweet, method: :delete ,class:"btn btn-secondary btn-sm" %>
+      </td> 
+  </tr>   
+  <%end%> 
+  <%end%>
+  </tbody>
+</table>
+</div>
+
+<br/><br/>
+<h1>Connections</h1>
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Action</th>
+
+    </tr>
+  </thead>
+  <tbody>
+   
+  <% if @Connections.count ==0%>
+      <tr>
+        <td>1</td>
+        <td>Not Available</td>
+        <td>Not Available</td>
+      </tr>
+  <%else%> 
+  <% @Connections.each do |c|%>  
+  <tr>
+      <td class="counterCell"></td>
+      <td> 
+          <% p= Profile.where("user_id IN(?)",c.subscription_id)%>
+          <%= link_to p.first.name,p.first %>
+      </td>
+      <td>
+       <%= button_to "Destroy", c, method: :delete ,class:"btn btn-secondary btn-sm" %>
+      </td> 
+  </tr>   
+  <%end%> 
+  <%end%>
+  </tbody>
+</table>
+</div>

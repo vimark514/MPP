@@ -1,0 +1,76 @@
+<div class="container">
+<br/>
+<%if @profiles.blank? %>
+  
+    <%= image_tag "search" ,class:"rounded mx-auto d-block"%>
+    <br/>
+    <p style="text-align: center;"> No Public User's Found !</p>
+
+<%else %>
+
+<%@profiles.each do |profile|%>
+ <%if profile.user!= current_user %>
+<div class="card" style="width:30%;float:left;margin:4px;" >
+ <div class="card-header">
+      <strong>Name:</strong>
+     <%= profile.name %>
+    
+ </div>
+ <div class="card-body">
+  <div id="<%= dom_id profile %>">
+   <%= image_tag(profile.profile_photo,class:"rounded mx-auto ",style: 'height:150px;width:150px;') %>
+   <br/><br/>
+   <%if current_user.nil? %>
+    <% uid =0 %>
+   <%else%>
+     <% uid = current_user.id %>
+   <%end%>
+   <div class="btn-group">
+  <%if !Subscription.exists?('subscription_id' => profile.user.id,'user_id' => uid)%>
+   <%= form_with(model: @subscription) do |form| %>
+  <% if @subscription.errors.any? %>
+    
+      <h2><%= pluralize(@subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
+
+      <ul>
+        <% @subscription.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+ 
+  <div>
+    
+    <%= form.number_field :subscription_id ,value:profile.user.id ,type: :hidden%>
+    <% if !current_user.nil? %>
+    <%= form.number_field :user_id ,value:current_user.id ,type: :hidden%>
+    <%end%>
+  </div>
+
+  <div>
+    <%= form.submit value:"connect",class:"btn btn-danger btn-sm" %>
+  </div>
+ <% end %>
+
+<%else%>
+ <% c = Subscription.where('subscription_id' => profile.user.id)%>
+ <%= button_to "Unconnect", c.first, method: :delete ,class:"btn btn-secondary btn-sm" %>
+<%end%>
+  &nbsp;
+
+   <button class="btn btn-sm">Connections :
+    <%= profile.user.subscriptions.count%>
+    </button>
+    &nbsp;
+    <%= link_to "show more", profile_path(profile) ,class:"btn btn btn-sm"%>
+  </div> 
+
+   </div> 
+  </div>
+  </div>  
+ </div>
+ <%end%>
+<%end%>
+<%end%>
+</div>

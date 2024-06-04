@@ -1,0 +1,45 @@
+<div class="container">
+<div id="tweets">
+  <h3> Search Results :</h3>
+  <br/>
+
+  <%if @tweets.blank? %>
+         <%= image_tag "search" ,class:"rounded mx-auto d-block"%>
+    <br/>
+    <p style="text-align: center;"> No Public tweets Found !</p>  
+  <%else%>
+  <% @tweets.each do |tweet| %>
+    <div class="card"> 
+ 
+  
+      <div class="card-body">
+      <strong>
+       Title:
+       <%= tweet.title%>
+       </strong>
+      <% if tweet.image.attached? %> 
+      <br/><br/>
+      <%= image_tag tweet.image ,class:"rounded ",style:"width:400px;"%>
+      <%end%>
+       <strong>About:</strong>
+        <%= tweet.about%>
+        
+      </div>
+      <div class="card-footer">
+        
+        <%if !tweet.user.profile.nil? %>
+         <%= image_tag tweet.user.profile.profile_photo ,class:"rounded-circle",style:"width:50px;height:50px;" %> 
+         &nbsp;
+          <strong>  <%= link_to tweet.user.profile.name ,profile_path(tweet.user.profile)%> </strong>  
+       <%else%> 
+         <strong>  <%= tweet.user.email%> </strong>
+       <%end%> 
+         <%= link_to "Show more", tweet ,class:"btn btn-info btn-sm"%>
+      </div>  
+    
+    </div>
+    <br/><br/>
+  <% end %>
+<%end%>  
+</div>
+</div>

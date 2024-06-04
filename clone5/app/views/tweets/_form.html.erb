@@ -1,0 +1,48 @@
+
+
+<%= form_with(model: tweet) do |form| %>
+   
+  
+    <% if tweet.errors.any? %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <ul>
+        <% tweet.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+   </button>
+  </div>
+  <% end %>
+  
+
+  <div>
+    <%= form.label :title, style: "display: block",class:"form-label" %>
+    <%= form.text_field :title ,class:"form-control" ,style:"width:500px;"%>
+  </div>
+
+  <div>
+    <%= form.label :about, style: "display: block",class:"form-label" %>
+    <%= form.text_field :about ,class:"form-control" ,style:"width:500px;"%>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" ,class:"form-label"%>
+    <%= form.text_area :description ,class:"form-control" ,style:"width:500px;"%>
+  </div>
+
+  <div>
+    <%= form.label :image, style: "display: block" ,class:"form-label"%>
+    <%= form.file_field :image ,class:"form-control" ,style:"width:500px;"%>
+  </div>
+ 
+  <div>
+    <%= form.number_field :user_id,id: :tweet_user_id,value: current_user.id,type: :hidden %>
+  </div>
+  <br/>
+  <div>
+    <%= form.submit class:"btn btn-success btn-sm"%>
+  </div>
+<% end %>
+
